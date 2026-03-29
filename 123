@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Тест: Конфликтный ли ты?</title>
+
+<style>
+body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Заголовок */
+header {
+    text-align: center;
+    padding: 30px 10px;
+    background: linear-gradient(90deg, #000, #001f26);
+    border-bottom: 2px solid #00cfff;
+}
+
+h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+/* Контейнер */
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Прогресс */
+.progress-bar {
+    height: 8px;
+    background: #222;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.progress {
+    height: 8px;
+    background: #00cfff;
+    width: 0%;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+/* Карточки */
+.question {
+    background: #111;
+    border: 1px solid #00cfff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.question:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px #00cfff33;
+}
+
+/* Кнопки */
+label {
+    display: block;
+    background: #00cfff;
+    color: #000;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+label:hover {
+    background: #00aacc;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"]:checked + span {
+    font-weight: bold;
+}
+
+/* Кнопка */
+button {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    background: #00cfff;
+    border: none;
+    color: black;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #009ec3;
+}
+
+/* Результат */
+.result {
+    margin-top: 25px;
+    font-size: 22px;
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #00cfff;
+    border-radius: 12px;
+    animation: fadeIn 0.5s ease;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #555;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Тест: Конфликтный ли ты человек?</h1>
+</header>
+
+<div class="container">
+
+<div class="progress-bar">
+    <div class="progress" id="progress"></div>
+</div>
+
+<form id="quiz"></form>
+
+<button onclick="calculate()">Узнать результат</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<footer>
+    сайт создан 412 комнатой
+</footer>
+
+<script>
+const questions = [
+"Часто ли вы спорите с людьми?",
+"Легко ли вы раздражаетесь?",
+"Любите ли вы доказывать свою правоту?",
+"Часто ли вы повышаете голос?",
+"Трудно ли вам идти на компромисс?",
+"Вы быстро обижаетесь?",
+"Считаете ли вы себя вспыльчивым?",
+"Легко ли вы прощаете людей?",
+"Любите ли вы контролировать других?",
+"Часто ли у вас конфликты на работе или учебе?",
+"Сложно ли вам признать ошибку?",
+"Вы склонны обвинять других?",
+"Любите ли вы критиковать?",
+"Часто ли вы чувствуете раздражение?",
+"Вы стараетесь избегать конфликтов?"
+];
+
+const form = document.getElementById("quiz");
+
+questions.forEach((q, i) => {
+    form.innerHTML += `
+    <div class="question">
+        <p><b>${i+1}. ${q}</b></p>
+        <label><input type="radio" name="q${i}" value="2" onclick="updateProgress()"><span> Да</span></label>
+        <label><input type="radio" name="q${i}" value="1" onclick="updateProgress()"><span> Иногда</span></label>
+        <label><input type="radio" name="q${i}" value="0" onclick="updateProgress()"><span> Нет</span></label>
+    </div>`;
+});
+
+function updateProgress() {
+    let answered = 0;
+
+    for (let i = 0; i < questions.length; i++) {
+        let answers = document.getElementsByName("q"+i);
+        for (let a of answers) {
+            if (a.checked) answered++;
+        }
+    }
+
+    let percent = (answered / questions.length) * 100;
+    document.getElementById("progress").style.width = percent + "%";
+}
+
+function calculate() {
+    let score = 0;
+
+    for (let i = 0; i < questions.length; i++) {
+        let answers = document.getElementsByName("q"+i);
+        for (let a of answers) {
+            if (a.checked) score += +a.value;
+        }
+    }
+
+    let text = "";
+
+    if (score >= 20) {
+        text = "😬 Вы очень конфликтный человек";
+    } else if (score >= 10) {
+        text = "🤔 Вы иногда вступаете в конфликты";
+    } else {
+        text = "😊 Вы неконфликтный человек";
+    }
+
+    document.getElementById("result").innerText = text;
+}
+</script>
+
+</body>
+</html>
